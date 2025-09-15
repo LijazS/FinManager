@@ -1,0 +1,140 @@
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* distribute items to left and right */
+    padding: 0.5% 2rem;
+    background-color: #1e1e1e;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Full viewport width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    box-sizing: border-box; /* important to include padding in width */
+}
+
+/* Parent dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown > a {
+  
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgb(37, 37, 37);
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  z-index: 1000;
+  padding: 0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Submenu inside dropdown */
+.nested-dropdown {
+  position: relative;
+}
+
+.nested-dropdown > a {
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  color: #555;
+}
+
+.nested-dropdown:hover > .nested-content {
+  display: block;
+}
+
+.nested-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%; /* to show it on the right */
+  background-color:  rgb(37, 37, 37);
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  z-index: 1001;
+}
+
+.nested-content li a {
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.nested-content li a:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+/* nav links aligned to the right */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 3.5rem;
+    margin: 2;
+    padding: 0;
+}
+
+.signout-card {
+    background-color: #000000;
+     padding: 0.5rem 1rem;
+    border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(243, 5, 5, 0.1);
+
+  border: 0.5px solid rgb(47, 47, 48); 
+}
+
+.signout-card:hover {
+  transform:scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+
+.nav-signout {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    margin-left: auto; /* Pushes it to the far right */
+}
+
+.nav-signout li a{
+     color: rgb(255, 0, 30);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-signout li a:hover {
+    color: #94143e;
+}
+
+/* individual link styles */
+.nav-links li a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #00bcd4;
+}
