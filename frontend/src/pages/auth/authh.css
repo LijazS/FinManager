@@ -1,0 +1,84 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* full viewport height */
+}
+
+.login-box {
+  border: 5px solid #1d1c1c; /* add a color */
+  border-radius: 15px;
+  padding: 20px 40px;
+  background-color: rgb(32, 32, 32);
+  color: white;
+  height: 50vh;
+  width: 50vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px 2px rgba(79, 82, 85, 0.7); /* blue glow */
+  /* center content inside the box */
+
+}
+
+
+.q{
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+
+    
+}
+
+.r{
+   display: flex;
+   flex-direction: column;
+ padding-top: 5%;    
+ text-align: center;
+  width: 100%;
+  height: 50%;
+  justify-content: center;
+  gap: 8%;
+ 
+  
+ 
+   
+
+}
+
+.Sign-in-with-google {
+  background-color: #1a73e8;  /* Google blue */
+  color: white;
+  font-weight: 600;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(26, 115, 232, 0.4);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  align-self: center;
+}
+
+.Sign-in-with-google:hover {
+  background-color: #1669c1;
+}
+
+.Sign-in-with-email{
+    background-color: #46924c;  /* Google blue */
+  color: white;
+  font-weight: 600;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(26, 115, 232, 0.4);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  align-self:center;
+  
+
+}
+
+.Sign-in-with-email:hover {
+  background-color: #34742b;
+}

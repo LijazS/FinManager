@@ -1,0 +1,132 @@
+.wholePage{
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+   min-height: 100vh;
+}
+
+
+.between {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+ margin: 0;
+ 
+  padding: 5rem 2rem 2rem 2rem;
+  background-color: #5a5656;
+  
+}
+
+.bals {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Center children horizontally */
+  align-items: center;      /* Center children vertically */
+  
+  padding: 0rem 0rem 0rem 0rem;
+  background-color: #353030;
+  width: 100%;
+  max-width: 50%;
+  gap: 1rem;
+  align-self: self-start;       /* Center the container itself if it's inside a flex parent */
+  text-align: center;
+  
+
+  border: 3px solid rgba(167, 10, 10, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 10px 2px rgba(245, 246, 247, 0.7); 
+  margin-right: 10px;
+}
+
+.balsRow{
+display: flex;
+  flex-direction: row;
+  justify-content:flex-start;  /* Center children horizontally */
+  align-items:start;      /* Center children vertically */
+  
+  padding: 2rem 0rem 3rem 0rem;
+  background-color: #353030;
+  width: 100%;
+
+  align-self:flex-start;       /* Center the container itself if it's inside a flex parent */
+  text-align: center;
+
+
+  border: 3px solid rgba(167, 10, 10, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 10px 2px rgba(245, 246, 247, 0.7); 
+  
+
+}
+
+.balsRow2{
+display: flex;
+  flex-direction: row;
+  justify-content: center;  /* Center children horizontally */
+  align-items: center;      /* Center children vertically */
+  
+  padding: 0rem 0rem 0rem 0rem;
+  background-color: #353030;
+  width: 100%;
+
+  align-self: self-start;       /* Center the container itself if it's inside a flex parent */
+  text-align: center;
+
+  border: 3px solid rgba(167, 10, 10, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 10px 2px rgba(245, 246, 247, 0.7); 
+  margin-right: 10px;
+
+}
+
+
+/* From Uiverse.io by krittika_3142 */ 
+.finmate-card {
+  background: linear-gradient(145deg, #1a1a1f, #0e0e10);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 25px;
+  width: 30%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  align-self:flex-start;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.finmate-card-balance {
+  margin-bottom: 20px;
+}
+
+.finmate-card-label {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  margin-bottom: 5px;
+}
+
+.finmate-card-amount {
+  font-size: 1.8rem;
+  color: #f5f5f5;
+  margin: 0;
+  font-weight: 600;
+}
+
+.finmate-card-summary {
+  display: flex;
+  justify-content: space-between;
+}
+
+.finmate-card-green {
+  color: #4ade80;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.finmate-card-red {
+  color: #f87171;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
