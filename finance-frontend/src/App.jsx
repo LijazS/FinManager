@@ -5,6 +5,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import LandingPage from './LandingPage.jsx'
+import Signup from './pages/Signup.jsx'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage/>} />
+          <Route path="/signup" element={<Signup/>} />
         </Routes>
       </Router>
    </>

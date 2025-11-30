@@ -1,7 +1,12 @@
 import React from "react";
 import Header from "./components/Header.jsx";
+import axios from "axios";
+import { useEffect,useState } from "react";
+
 
 const LandingPage = () => {
+    
+
     return (
         <div className="w-full min-h-screen pt-12 left-0 right-0 bg-gray-900 text-white relative pt-20">
       <div className="w-full">
