@@ -34,11 +34,13 @@ const Header = () => {
   <div className="w-full px-4 md:px-8 top-0">
     <header className="w-full flex items-center justify-between py-4 md:py-5 px-4 md:px-8">
       <a href="/" className="inline-flex items-center gap-2.5 text-2xl font-bold text-white md:text-3xl" aria-label="logo">
-        <svg width="95" height="94" viewBox="0 0 95 94" className="h-auto w-6 text-indigo-500" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M96 0V47L48 94H0V47L48 0H96Z" />
-        </svg>
+        <img
+    src="/finance-logo.svg"
+    alt="FinAgent logo"
+    className="w-10 h-auto"   // ← same size as your old SVG
+  />
 
-          FinAgent
+                FinAgent
      
      </a>
       <nav className="hidden gap-12 lg:flex">
