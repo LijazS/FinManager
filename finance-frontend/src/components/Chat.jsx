@@ -48,9 +48,9 @@ const Chat = () => {
     };
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col border border-[#ffffff2d] shadow-md rounded-lg bg-[#121212]">
             {/* Chat History Area */}
-            <div className="mb-4 flex-1 overflow-y-auto border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="mb-4 flex-1 overflow-y-auto rounded-lg p-4 bg-[#121212]">
                 {chatHistory.length === 0 && <p className="text-gray-400 text-center">Start chatting...</p>}
                 
                 {chatHistory.map((chat, index) => (
@@ -68,7 +68,7 @@ const Chat = () => {
             </div>
 
             {/* Input Form */}
-            <form onSubmit={sendMessage} className="flex gap-2">
+            <form onSubmit={sendMessage} className="flex rounded-lg  border-gray-800 pb-2 mx-2">
                 <input
                     type="text"
                     value={message}
@@ -79,7 +79,7 @@ const Chat = () => {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg disabled:opacity-50"
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg disabled:opacity-50 mx-2"
                 >
                     Send
                 </button>

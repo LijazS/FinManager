@@ -29,7 +29,7 @@ const Header = () => {
 };
 
     return (
-        <div className="fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800 shadow-md">
+        <div className="fixed inset-x-0 top-0 z-50 bg-[#121212] border-b border-[#ffffff2d] shadow-md">
 
   <div className="w-full px-4 md:px-8 top-0">
     <header className="w-full flex items-center justify-between py-4 md:py-5 px-4 md:px-8">

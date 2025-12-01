@@ -37,12 +37,12 @@ const Dashboard = () => {
       <div className="w-full">
         <Header />
       </div>
-       <div className="flex-1 p-4 pt-6 bg-gray-700 overflow-y-auto">
+       <div className="flex-1 p-4 pt-6 bg-[#121212] overflow-y-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
             
                 {/* <!-- Left Column --> */}
                 <div className="flex flex-col gap-4 col-span-2 h-full min-h-0">
-                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/4">
+                <div className="bg-[#121212] rounded-lg shadow p-4 h-1/4">
                     <TopLeft />
                 </div>
                 
@@ -56,7 +56,7 @@ const Dashboard = () => {
                     {/* Top block */}
                     <Insights />
                 
-                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
+                <div className="bg-[#121212] rounded-lg shadow p-4 h-1/2">
                     {/* Bottom block */}
                     Bottom Right
                 </div>
