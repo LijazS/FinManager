@@ -42,7 +42,8 @@ const Header = () => {
      
      </a>
       <nav className="hidden gap-12 lg:flex">
-        <Link to="/" className="text-lg font-semibold text-gray-300 transition duration-100 hover:text-indigo-500 active:text-indigo-700">Home</Link>
+        {token ? <Link to="/dashboard" className="text-lg font-semibold text-gray-300 transition duration-100 hover:text-indigo-500 active:text-indigo-700">Home</Link> : 
+        <Link to="/" className="text-lg font-semibold text-gray-300 transition duration-100 hover:text-indigo-500 active:text-indigo-700">Home</Link>}
         <a href="#" className="text-lg font-semibold text-gray-300 transition duration-100 hover:text-indigo-500 active:text-indigo-700">Pricing</a>
         <a href="#" className="text-lg font-semibold text-gray-300 transition duration-100 hover:text-indigo-500 active:text-indigo-700">About</a>
       </nav>

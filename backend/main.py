@@ -11,9 +11,9 @@ from typing import Optional, List
 from database import get_db
 import models
 import schemas
-from auth import get_password_hash, verify_password
+from auth import get_password_hash, verify_password, verify_access_token, create_access_token, get_user_id
 from database import engine, Base
-from auth import create_access_token
+
 
 load_dotenv()
 
@@ -71,7 +71,7 @@ async def signup(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(new_user)
 
-    token = create_access_token(data={"sub": str(new_user.email)}, secret_key=secret_key)
+    token = create_access_token(data={"sub": str(new_user.id)}, secret_key=secret_key)
 
     return {
         "id": str(new_user.id),
@@ -96,7 +96,7 @@ async def login(user: schemas.UserLogin, db: AsyncSession = Depends(get_db)):
     if not verify_password(user.password, existing_user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect password")
     
-    token = create_access_token(data={"sub": str(existing_user.email)}, secret_key=secret_key)
+    token = create_access_token(data={"sub": str(existing_user.id)}, secret_key=secret_key)
     
     return {
         "id": str(existing_user.id),
@@ -105,6 +105,82 @@ async def login(user: schemas.UserLogin, db: AsyncSession = Depends(get_db)):
     }
 
 #############################  END USER LOGIN  ###############################
+
+############################ PROTECTED ROUTE EXAMPLE ###############################
+
+@app.get("/protected")
+async def protected_route(request: Request):
+    token = request.headers.get("Authorization")
+    if not token:
+        raise HTTPException(status_code=401, detail="Token missing")
+
+    token = token.replace("Bearer ", "")
+    payload = verify_access_token(token, secret_key=secret_key)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    return {"message": "You have access to this protected route", "user": payload.get("sub"), "accessFlag": True}
+
+#############################  END PROTECTED ROUTE EXAMPLE  ###############################
+
+# --- Imports needed for the Chat Agent ---
+from agent import react_graph # Import your compiled graph
+from langchain_core.messages import HumanMessage
+from fastapi.security import OAuth2PasswordBearer # Required for header extraction
+from langchain_core.messages import AIMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+
+
+SYSTEM_PROMPT = (
+    "You are a financial expense tracking assistant.\n"
+    "When the user mentions spending money, infer:\n"
+    "- amount (a number)\n"
+    "- category from this set only: Food, Transport, Utilities, Entertainment, "
+    "Groceries, Rent, Healthcare, Other.\n"
+    "- description: a short name of what they bought (e.g. 'coffee', 'Uber to office').\n"
+    "If the user says something like 'I spent 10 on coffee', infer category=Food and "
+    "description='coffee' without asking again.\n"
+    "Only ask follow-up questions if a field is truly missing (for example, "
+    "no amount given at all). Do NOT repeatedly ask for category/description "
+    "when they can be inferred from the sentence."
+)
+
+# Define scheme so Depends knows where to find the token
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+# Create a dependency wrapper for your get_user_id function
+async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
+    user_id = get_user_id(token, secret_key) # Calls your auth.py function
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid token or missing User ID")
+    return user_id
+
+@app.post("/chat")
+async def chat_endpoint(
+    request: schemas.ChatRequest, 
+    user_id: str = Depends(get_current_user_id)
+):
+    print(f"Current user ID: {user_id}")
+
+    messages = [SystemMessage(content=SYSTEM_PROMPT)]  # <-- add system message first
+
+    for msg in request.history:
+        if msg['role'] == 'user':
+            messages.append(HumanMessage(content=msg['text']))
+        elif msg['role'] == 'bot':
+            messages.append(AIMessage(content=msg['text']))
+    
+    messages.append(HumanMessage(content=request.message))
+
+    initial_state = {"messages": messages}
+    config = {"configurable": {"user_id": user_id}}
+
+    try:
+        result = await react_graph.ainvoke(initial_state, config=config)
+        return {"response": result["messages"][-1].content}
+    except Exception as e:
+        print(f"Agent Error: {e}")
+        raise HTTPException(status_code=500, detail="Agent failed")
 
 
 

@@ -1,41 +1,67 @@
-import React from "react";
+import React, { use } from "react";
 import Header from "../components/Header.jsx";
+import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import TopLeft from "../components/TopLeft.jsx";
+import Chat from "../components/Chat.jsx";
 
 const Dashboard = () => {
 
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        // Example API call to fetch dashboard data
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/protected`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                console.log("Dashboard data:", response.data);
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error.response.data);
+                console.log("Redirecting to Front Page");
+                navigate("/");
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return(
-    <div className="w-full min-h-screen pt-12 left-0 right-0 bg-gray-900 text-white relative pt-20">
+    <div className="w-full h-screen bg-gray-900 text-white flex flex-col pt-20">
       <div className="w-full">
         <Header />
       </div>
-                <div className="min-h-screen p-4 pt-6 bg-gray-700">
-        <div className="grid grid-cols-4 gap-4 h-[90vh] ">
+       <div className="flex-1 p-4 pt-6 bg-gray-700 overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-[90vh]">
             
-            {/* <!-- Left Column --> */}
-            <div className="flex flex-col gap-4 col-span-2">
-            <div className="bg-gray-500 rounded-lg shadow p-4 h-1/4">
-                {/* Top small block */}
-                Top Left
-            </div>
-            <div className="bg-gray-500 rounded-lg shadow p-4 h-3/4">
-                {/* Bottom large block */}
-                Bottom Left
-            </div>
-            </div>
+                {/* <!-- Left Column --> */}
+                <div className="flex flex-col gap-4 col-span-2">
+                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/4">
+                    <TopLeft />
+                </div>
+                <div className="bg-gray-500 rounded-lg shadow p-4 h-3/4">
+                    <Chat />
+                </div>
+                </div>
 
-            {/* Right Column */}
-            <div className="flex flex-col gap-4 col-span-2">
-            <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
-                {/* Top block */}
-                Top Right
-            </div>
-            <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
-                {/* Bottom block */}
-                Bottom Right
-            </div>
-            </div>
+                {/* Right Column */}
+                <div className="flex flex-col gap-4 col-span-2">
+                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
+                    {/* Top block */}
+                    Top Right
+                </div>
+                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
+                    {/* Bottom block */}
+                    Bottom Right
+                </div>
+                </div>
 
-        </div>
+            </div>
         </div>
     </div>
     )
