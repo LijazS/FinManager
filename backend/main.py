@@ -1,3 +1,6 @@
+from datetime import date, timedelta
+import json
+import uuid
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,7 +11,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 from typing import Optional, List
 
-from database import get_db
+from database import get_db, AsyncSessionLocal
 import models
 import schemas
 from auth import get_password_hash, verify_password, verify_access_token, create_access_token, get_user_id
@@ -106,7 +109,7 @@ async def login(user: schemas.UserLogin, db: AsyncSession = Depends(get_db)):
 
 #############################  END USER LOGIN  ###############################
 
-############################ PROTECTED ROUTE EXAMPLE ###############################
+############################ PROTECTED ROUTE ###############################
 
 @app.get("/protected")
 async def protected_route(request: Request):
@@ -121,29 +124,22 @@ async def protected_route(request: Request):
     
     return {"message": "You have access to this protected route", "user": payload.get("sub"), "accessFlag": True}
 
-#############################  END PROTECTED ROUTE EXAMPLE  ###############################
+#############################  END PROTECTED ROUTE  ###############################
+
+
+
+##############################  AI AGENT ENDPOINT  ##############################
 
 # --- Imports needed for the Chat Agent ---
-from agent import react_graph # Import your compiled graph
+from agent import react_graph, llm # Import your compiled graph
 from langchain_core.messages import HumanMessage
 from fastapi.security import OAuth2PasswordBearer # Required for header extraction
 from langchain_core.messages import AIMessage
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
+import prompts
 
-SYSTEM_PROMPT = (
-    "You are a financial expense tracking assistant.\n"
-    "When the user mentions spending money, infer:\n"
-    "- amount (a number)\n"
-    "- category from this set only: Food, Transport, Utilities, Entertainment, "
-    "Groceries, Rent, Healthcare, Other.\n"
-    "- description: a short name of what they bought (e.g. 'coffee', 'Uber to office').\n"
-    "If the user says something like 'I spent 10 on coffee', infer category=Food and "
-    "description='coffee' without asking again.\n"
-    "Only ask follow-up questions if a field is truly missing (for example, "
-    "no amount given at all). Do NOT repeatedly ask for category/description "
-    "when they can be inferred from the sentence."
-)
+
 
 # Define scheme so Depends knows where to find the token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -155,6 +151,8 @@ async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
         raise HTTPException(status_code=401, detail="Invalid token or missing User ID")
     return user_id
 
+########################## CHAT ENDPOINT ###############################
+
 @app.post("/chat")
 async def chat_endpoint(
     request: schemas.ChatRequest, 
@@ -162,7 +160,7 @@ async def chat_endpoint(
 ):
     print(f"Current user ID: {user_id}")
 
-    messages = [SystemMessage(content=SYSTEM_PROMPT)]  # <-- add system message first
+    messages = [SystemMessage(content=prompts.SYSTEM_PROMPT_CHAT)]  # <-- add system message first
 
     for msg in request.history:
         if msg['role'] == 'user':
@@ -181,8 +179,77 @@ async def chat_endpoint(
     except Exception as e:
         print(f"Agent Error: {e}")
         raise HTTPException(status_code=500, detail="Agent failed")
+    ###############################  END CHAT ENDPOINT  ###############################
 
+########################## INSIGHTS ENDPOINT ###############################
 
+@app.get("/insights")
+async def insights_endpoint(
+    request: Request,
+    user_id: str = Depends(get_current_user_id),
+):
+    # 1. Load this user's expenses (e.g., last 30 days)
+    try:
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid user ID")
+
+    async with AsyncSessionLocal() as session:
+        # Example: last 30 days; adjust as you like
+        start_date = date.today() - timedelta(days=30)
+
+        stmt = (
+            select(models.ExpenseModel)
+            .where(
+                (models.ExpenseModel.user_id == user_uuid)
+                & (models.ExpenseModel.date_added >= start_date)
+            )
+        )
+        result = await session.execute(stmt)
+        expenses = result.scalars().all()
+
+    if not expenses:
+        return {"insights": "You don't have any expenses in the last 30 days yet."}
+
+    # 2. Convert to a simple JSON structure for the LLM
+    expenses_data = [
+        {
+            "amount": float(exp.amount),
+            "currency": exp.currency,
+            "category": exp.category,
+            "description": exp.description,
+            "date": exp.date_added.isoformat(),
+        }
+        for exp in expenses
+    ]
+
+    # 3. Build messages for the insights prompt
+    messages = [
+        SystemMessage(content=prompts.SYSTEM_PROMPT_INSIGHTS),
+        HumanMessage(
+            content=(
+                "Here is this user's expense history for the last 30 days as JSON:\n"
+                f"{json.dumps(expenses_data, ensure_ascii=False)}\n\n"
+                "Analyze this data and provide:\n"
+                "- 3–5 key insights about their spending habits\n"
+                "- any notable spikes or patterns\n"
+                "- 2–3 concrete suggestions to optimize or adjust their spending.\n"
+                "Be concise and use bullet points."
+            )
+        ),
+    ]
+
+    # 4. Ask Gemini for insights
+    try:
+        response = await llm.ainvoke(messages)
+        return {"insights": response.content}
+    except Exception as e:
+        print("INSIGHTS LLM ERROR:", repr(e))
+        raise HTTPException(status_code=500, detail="Failed to generate insights")
+
+##############################  END INSIGHTS ENDPOINT  ###############################
+
+##############################  AI AGENT ENDPOINT  ###############################
 
 
 if __name__ == "__main__":

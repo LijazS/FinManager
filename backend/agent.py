@@ -106,12 +106,61 @@ async def get_expenses(config: RunnableConfig):
         except Exception as e:
             # Log actual DB error so you see it in the terminal
             print("DATABASE ERROR IN get_expenses:", repr(e))
-            return f"❌ Error retrieving expenses: {str(e)}"
 
+            
+@tool
+async def get_expenses_by_date(
+    target_date: str,  # e.g. "2025-12-01"
+    config: RunnableConfig,
+):
+    """
+    Retrieves all expenses for the current user on a specific date.
+    target_date must be in YYYY-MM-DD format.
+    """
+    user_id_str = config.get("configurable", {}).get("user_id")
+    if not user_id_str:
+        return "❌ Error: User ID missing."
+
+    try:
+        user_uuid = uuid.UUID(user_id_str)
+    except ValueError:
+        return f"❌ Error: Invalid user ID format: {user_id_str}"
+
+    # Parse the date string
+    try:
+        parsed_date = datetime.strptime(target_date, "%Y-%m-%d").date()
+    except ValueError:
+        return "❌ Error: Date must be in YYYY-MM-DD format (e.g., 2025-12-01)."
+
+    async with AsyncSessionLocal() as session:
+        try:
+            stmt = (
+                select(ExpenseModel)
+                .where(
+                    (ExpenseModel.user_id == user_uuid) &
+                    (ExpenseModel.date_added == parsed_date)
+                )
+            )
+            result = await session.execute(stmt)
+            expenses = result.scalars().all()
+
+            if not expenses:
+                return f"No expenses found on {parsed_date}."
+
+            lines = []
+            for exp in expenses:
+                lines.append(
+                    f"- {exp.amount} {exp.currency} ({exp.category}) on {exp.date_added}: {exp.description}"
+                )
+            return f"Here are your expenses on {parsed_date}:\n" + "\n".join(lines)
+
+        except Exception as e:
+            print("DATABASE ERROR IN get_expenses_by_date:", repr(e))
+            return f"❌ Error retrieving expenses: {str(e)}"
 # 3. BUILD THE GRAPH
 
 # List of tools available to the agent
-tools = [save_expense, get_expenses]
+tools = [save_expense, get_expenses, get_expenses_by_date]
 
 # Bind tools to Gemini so it knows they exist
 llm_with_tools = llm.bind_tools(tools)

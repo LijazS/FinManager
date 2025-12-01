@@ -1,10 +1,11 @@
-import React, { use } from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header.jsx";
 import axios from "axios";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopLeft from "../components/TopLeft.jsx";
 import Chat from "../components/Chat.jsx";
+import Insights from "../components/Insights.jsx";
+
 
 const Dashboard = () => {
 
@@ -37,24 +38,24 @@ const Dashboard = () => {
         <Header />
       </div>
        <div className="flex-1 p-4 pt-6 bg-gray-700 overflow-y-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-[90vh]">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
             
                 {/* <!-- Left Column --> */}
-                <div className="flex flex-col gap-4 col-span-2">
+                <div className="flex flex-col gap-4 col-span-2 h-full min-h-0">
                 <div className="bg-gray-500 rounded-lg shadow p-4 h-1/4">
                     <TopLeft />
                 </div>
-                <div className="bg-gray-500 rounded-lg shadow p-4 h-3/4">
+                
                     <Chat />
-                </div>
+                
                 </div>
 
                 {/* Right Column */}
-                <div className="flex flex-col gap-4 col-span-2">
-                <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
+                <div className="flex flex-col gap-4 col-span-2 h-full">
+                
                     {/* Top block */}
-                    Top Right
-                </div>
+                    <Insights />
+                
                 <div className="bg-gray-500 rounded-lg shadow p-4 h-1/2">
                     {/* Bottom block */}
                     Bottom Right

@@ -48,9 +48,9 @@ const Chat = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-4">
+        <div className="h-full flex flex-col">
             {/* Chat History Area */}
-            <div className="mb-6 h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="mb-4 flex-1 overflow-y-auto border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
                 {chatHistory.length === 0 && <p className="text-gray-400 text-center">Start chatting...</p>}
                 
                 {chatHistory.map((chat, index) => (
@@ -64,7 +64,7 @@ const Chat = () => {
                         </span>
                     </div>
                 ))}
-                {isLoading && <div className="text-gray-500 text-sm">Agent is typing...</div>}
+                {isLoading && <div className="text-gray-500 text-sm">FinAgent is typing...</div>}
             </div>
 
             {/* Input Form */}
