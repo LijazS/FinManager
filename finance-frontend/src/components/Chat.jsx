@@ -48,7 +48,7 @@ const Chat = () => {
     };
 
     return (
-        <div className="h-full flex flex-col border border-[#ffffff2d] shadow-md rounded-lg bg-[#121212]">
+        <div className="h-full w-full flex flex-col border border-[#ffffff2d] shadow-md rounded-lg bg-[#121212]">
             {/* Chat History Area */}
             <div className="mb-4 flex-1 overflow-y-auto rounded-lg p-4 bg-[#121212]">
                 {chatHistory.length === 0 && <p className="text-gray-400 text-center">Start chatting...</p>}

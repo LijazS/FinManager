@@ -1,13 +1,70 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TopLeft from "../components/TopLeft.jsx";
 import Chat from "../components/Chat.jsx";
 import Insights from "../components/Insights.jsx";
+import Suggestions from "../components/Suggestions.jsx";
 
 
 const Dashboard = () => {
+
+    const [insights, setInsights] = useState("");
+    const [suggestions, setSuggestions] = useState("")
+    const [error, setError] = useState("");
+
+  const fetchInsights = async () => {
+    try {
+      setError("");
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/insights`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Insights data:", response.data);
+
+      const raw = response.data.insights || "";
+      // Optional: remove first paragraph (intro line)
+      const insightsStart = raw.indexOf("**Spending Insights**");
+      const suggestionsStart = raw.indexOf("**Spending Suggestions**");
+
+      let insightsSection = "";
+        let suggestionsSection = "";
+
+        if (insightsStart !== -1 && suggestionsStart !== -1) {
+        insightsSection = raw
+            .slice(insightsStart, suggestionsStart)  // from Insights heading up to Suggestions heading
+            .trim();
+
+        suggestionsSection = raw
+            .slice(suggestionsStart)                // from Suggestions heading to the end
+            .trim();
+        } else {
+        // Fallback: if headings missing, just treat whole thing as insights
+        insightsSection = raw.trim();
+        }
+
+        const cleanedInsights = insightsSection.split("\n").slice(1).join("\n");
+        const cleanedSuggestions = suggestionsSection.split("\n").slice(1).join("\n");
+
+      
+
+      setInsights(cleanedInsights);
+      setSuggestions(cleanedSuggestions)
+    } catch (err) {
+      console.error("Error fetching insights data:", err);
+      setError("Failed to load insights");
+    }
+  };
+
+  useEffect(() => {
+    fetchInsights();
+  }, []);
 
     const navigate = useNavigate();
     
@@ -54,12 +111,12 @@ const Dashboard = () => {
                 <div className="flex flex-col gap-4 col-span-2 h-full">
                 
                     {/* Top block */}
-                    <Insights />
+                    <Insights insights={insights} error={error}/>
                 
-                <div className="bg-[#121212] rounded-lg shadow p-4 h-1/2">
+                
                     {/* Bottom block */}
-                    Bottom Right
-                </div>
+                    <Suggestions suggestions={suggestions} error={error}/>
+                
                 </div>
 
             </div>

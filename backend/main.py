@@ -24,16 +24,16 @@ app = FastAPI()
 secret_key = os.getenv("SECRET_KEY")
 
 origins = [
-    "http://localhost:5173",  # Vite's default port
+    "http://localhost:5173",  
     "http://127.0.0.1:5173",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # Allow these origins
+    allow_origins=origins,      
     allow_credentials=True,
-    allow_methods=["*"],        # Allow all methods (GET, POST, etc.)
-    allow_headers=["*"],        # Allow all headers (Auth, etc.)
+    allow_methods=["*"],        
+    allow_headers=["*"],        
 )
 
 @app.on_event("startup")

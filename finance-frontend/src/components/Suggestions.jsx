@@ -1,16 +1,15 @@
+import React from "react";
 import axios from "axios";
 
-const Insights = ({insights, error}) => {
-  
 
+const Suggestions = ({suggestions, error}) => {
 
-
-  return (
-         <div className="h-1/2">
+    return(
+                <div className="h-1/2">
       {/* Card fills the available height inside the gray parent */}
       <div className="h-full w-full flex flex-col bg-[#121212] border border-[#ffffff2d] shadow-md rounded-xl px-4 py-3">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50 mb-3">
-          Spending Insights
+          Spending Suggestions
         </h2>
 
         {error && (
@@ -21,14 +20,14 @@ const Insights = ({insights, error}) => {
 
         {/* Content area expands and scrolls if needed */}
         <div className="flex-1 overflow-y-auto">
-          {!insights ? (
+          {!suggestions ? (
             <p className="text-sm text-gray-600 dark:text-gray-300">
               No insights yet. Add some expenses and refresh the page to see
               your spending analysis.
             </p>
           ) : (
             <div className="text-sm sm:text-base text-left text-gray-800 dark:text-gray-100 space-y-1">
-              {insights
+              {suggestions
                 .split("\n")
                 .filter((line) => line.trim().length > 0)
                 .map((line, idx) => {
@@ -46,7 +45,7 @@ const Insights = ({insights, error}) => {
                     );
                   }
 
-                 if (trimmed.startsWith("- ")) {
+                  if (trimmed.startsWith("- ")) {
   const content = trimmed.slice(2);
 
   return (
@@ -54,8 +53,9 @@ const Insights = ({insights, error}) => {
       key={idx}
       className="flex items-start gap-2 pl-1"
     >
-      {/* Fancy dot */}
-      <span className="mt-0.5 text-xlg">💸</span>
+      <span className="mt-0.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
+        Tip
+      </span>
 
       {/* Fancy text */}
       <span className="text-[0.9rem] leading-relaxed text-gray-100">
@@ -72,6 +72,8 @@ const Insights = ({insights, error}) => {
   );
 }
 
+
+
                   return <p key={idx}>{trimmed}</p>;
                 })}
             </div>
@@ -79,8 +81,8 @@ const Insights = ({insights, error}) => {
         </div>
       </div>
     </div>
+    )
 
-  );
-};
+}
 
-export default Insights;
+export default Suggestions;
