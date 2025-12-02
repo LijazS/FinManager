@@ -62,3 +62,11 @@ class Expense(BaseModel):
     class Config:
         orm_mode = True
 
+class calcResponse(BaseModel):
+    todays: float
+    months: float
+    years: float
+
+    class Config:
+        orm_mode = True
+

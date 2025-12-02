@@ -98,10 +98,10 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
             
                 {/* <!-- Left Column --> */}
-                <div className="flex flex-col gap-4 col-span-2 h-full min-h-0">
-                <div className="bg-[#121212] rounded-lg shadow p-4 h-1/4">
+                <div className="flex flex-col gap-4 col-span-2 h-full">
+                
                     <TopLeft />
-                </div>
+                
                 
                     <Chat />
                 
@@ -111,11 +111,11 @@ const Dashboard = () => {
                 <div className="flex flex-col gap-4 col-span-2 h-full">
                 
                     {/* Top block */}
-                    <Insights insights={insights} error={error}/>
+                    <Insights insights={insights} error={error} fetchInsights={fetchInsights}/>
                 
                 
                     {/* Bottom block */}
-                    <Suggestions suggestions={suggestions} error={error}/>
+                    <Suggestions suggestions={suggestions} error={error} />
                 
                 </div>
 

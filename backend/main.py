@@ -4,7 +4,7 @@ import uuid
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, extract, func
 import os
 from dotenv import load_dotenv
 
@@ -16,6 +16,15 @@ import models
 import schemas
 from auth import get_password_hash, verify_password, verify_access_token, create_access_token, get_user_id
 from database import engine, Base
+
+# --- Imports needed for the Chat Agent ---
+from agent import react_graph, llm # Import your compiled graph
+from langchain_core.messages import HumanMessage
+from fastapi.security import OAuth2PasswordBearer # Required for header extraction
+from langchain_core.messages import AIMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+
+import prompts
 
 
 load_dotenv()
@@ -45,7 +54,15 @@ async def on_startup():
 async def root():
     return {"message": "Hello from FastAPI"}
 
+# Define scheme so Depends knows where to find the token
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+# Create a dependency wrapper for your get_user_id function
+async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
+    user_id = get_user_id(token, secret_key) # Calls your auth.py function
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid token or missing User ID")
+    return user_id
 
 ############################ USER REGISTRATION ###############################
 
@@ -127,29 +144,74 @@ async def protected_route(request: Request):
 #############################  END PROTECTED ROUTE  ###############################
 
 
+############################ EXPENSES CALC #################################
+
+@app.get("/ecalc", response_model=schemas.calcResponse)
+async def ecalc(
+    request: Request,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    # 1. Load this user's expenses (e.g., last 30 days)
+    try:
+        user_uuid = uuid.UUID(user_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid user ID")
+
+    async with AsyncSessionLocal() as session:
+        # Example: last 30 days; adjust as you like
+        start_date_today = date.today() 
+        start_date_month = start_date_today.month
+        start_date_year = start_date_today.year
+
+
+        todays_stmt = (
+            select(func.sum(models.ExpenseModel.amount))
+            .where(
+                (models.ExpenseModel.user_id == user_uuid)
+                & (models.ExpenseModel.date_added == start_date_today)
+            )
+        )
+
+        months_stmt = (
+        select(func.sum(models.ExpenseModel.amount))
+        .where(
+            (models.ExpenseModel.user_id == user_uuid)
+            & (extract("year", models.ExpenseModel.date_added) == start_date_year)
+            & (extract("month", models.ExpenseModel.date_added) == start_date_month)
+        )
+    )
+        years_stmt = (
+        select(func.sum(models.ExpenseModel.amount))
+        .where(
+            (models.ExpenseModel.user_id == user_uuid)
+            & (extract("year", models.ExpenseModel.date_added) == start_date_year)
+        )
+    )
+        today_res = await db.execute(todays_stmt)
+        month_res = await db.execute(months_stmt)
+        year_res = await db.execute(years_stmt)
+
+        today_total = today_res.scalar() or 0
+        month_total = month_res.scalar() or 0
+        year_total = year_res.scalar() or 0
+
+        print(f"month_total {month_total}")
+
+        return{
+            "todays":today_total,
+            "months":month_total,
+            "years":year_total
+        }
+        
+
+
+############################ EXPENSES CALC #################################
+
 
 ##############################  AI AGENT ENDPOINT  ##############################
 
-# --- Imports needed for the Chat Agent ---
-from agent import react_graph, llm # Import your compiled graph
-from langchain_core.messages import HumanMessage
-from fastapi.security import OAuth2PasswordBearer # Required for header extraction
-from langchain_core.messages import AIMessage
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
-import prompts
-
-
-
-# Define scheme so Depends knows where to find the token
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
-# Create a dependency wrapper for your get_user_id function
-async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:
-    user_id = get_user_id(token, secret_key) # Calls your auth.py function
-    if not user_id:
-        raise HTTPException(status_code=401, detail="Invalid token or missing User ID")
-    return user_id
 
 ########################## CHAT ENDPOINT ###############################
 

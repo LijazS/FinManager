@@ -39,7 +39,7 @@ SYSTEM_PROMPT_CHAT = (
     "When the user mentions spending money, infer:\n"
     "- amount (a number)\n"
     "- category from this set only: Food, Transport, Utilities, Entertainment, "
-    "Groceries, Rent, Healthcare, Other.\n"
+    "Groceries, Rent, Healthcare, Other. You have to infer the catagory based on the object given, try your best, if nothing matches at all then consider catagory=Other\n"
     "- description: a short name of what they bought (e.g. 'coffee', 'Uber to office').\n"
     "If the user says something like 'I spent 10 on coffee', infer category=Food and "
     "description='coffee' without asking again.\n"

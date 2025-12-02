@@ -22,8 +22,7 @@ const Suggestions = ({suggestions, error}) => {
         <div className="flex-1 overflow-y-auto">
           {!suggestions ? (
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              No insights yet. Add some expenses and refresh the page to see
-              your spending analysis.
+              No Suggestions yet. Please wait while FinAgent loads...
             </p>
           ) : (
             <div className="text-sm sm:text-base text-left text-gray-800 dark:text-gray-100 space-y-1">
@@ -46,31 +45,28 @@ const Suggestions = ({suggestions, error}) => {
                   }
 
                   if (trimmed.startsWith("- ")) {
-  const content = trimmed.slice(2);
+                      const content = trimmed.slice(2);
 
-  return (
-    <p
-      key={idx}
-      className="flex items-start gap-2 pl-1"
-    >
-      <span className="mt-0.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
-        Tip
-      </span>
+                      return (
+                        <p
+                          key={idx}
+                          className="flex items-start gap-2 pl-1"
+                        >
+                          <span className="mt-0.5 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300">
+                            Tip
+                          </span>
 
-      {/* Fancy text */}
-      <span className="text-[0.9rem] leading-relaxed text-gray-100">
-        {/* Emphasize numbers with gradient text */}
-        <span className="bg-gradient-to-r from-emerald-300 to-sky-400 bg-clip-text text-transparent font-semibold">
-          {content.replace(/(\d+(\.\d+)?%?|\₹\s?\d[\d,]*)/, "$1")}
-        </span>{" "}
-        <span className="text-gray-300/90 italic">
-          {/* Slightly playful tone lives in the model’s text; this is just style */}
-          {content}
-        </span>
-      </span>
-    </p>
-  );
-}
+                          {/* Fancy text */}
+                          <span className="text-[0.9rem] leading-relaxed text-gray-100">
+                            {/* Emphasize numbers with gradient text */}
+                            <span className="bg-linear-to-r from-[#41db04] to-[#08a7a7] bg-clip-text text-transparent font-semibold">
+                              {content.replace(/(\d+(\.\d+)?%?|\₹\s?\d[\d,]*)/, "$1")}
+                            </span>{" "}
+                            
+                          </span>
+                        </p>
+                      );
+                          }
 
 
 
