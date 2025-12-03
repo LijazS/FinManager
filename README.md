@@ -13,13 +13,13 @@ FinAgent transforms expense tracking into natural conversations. Users chat with
 ## 🏗️ Architecture
 
 Frontend (React + Vite + Tailwind)
-↓
+
 FastAPI Backend
-├── JWT Auth Middleware
-├── LangGraph Agent Engine
-├── Database Layer (SQLAlchemy)
-└── LLM Integration (Claude/OpenAI)
-↓
+JWT Auth Middleware
+LangGraph Agent Engine
+Database Layer (SQLAlchemy)
+LLM Integration (Claude/OpenAI)
+
 PostgreSQL Database
 
 
