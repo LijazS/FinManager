@@ -14,11 +14,11 @@ FinAgent transforms expense tracking into natural conversations. Users chat with
 
 Frontend (React + Vite + Tailwind)
 
-FastAPI Backend
-JWT Auth Middleware
-LangGraph Agent Engine
-Database Layer (SQLAlchemy)
-LLM Integration (Claude/OpenAI)
+FastAPI - Backend
+JWT - Auth Middleware
+LangGraph - Agent Engine
+Database Layer - (SQLAlchemy)
+LLM Integration = (Gemini)
 
 PostgreSQL Database
 
@@ -61,7 +61,7 @@ Secure login and signup pages with JWT-based session management.
 
 **AI/ML**
 - LangChain/LangGraph (Agent framework)
-- Claude/OpenAI APIs (LLM integration)
+- GEMINI APIs (LLM integration)
 - Custom prompt engineering for financial data extraction
 
 **DevOps**
