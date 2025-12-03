@@ -7,8 +7,10 @@ const Insights = ({insights, error, fetchInsights}) => {
 
   return (
          <div className="h-1/2">
+
       {/* Card fills the available height inside the gray parent */}
       <div className="h-full w-full flex flex-col bg-[#121212] border border-[#ffffff2d] shadow-md rounded-xl px-4 py-3">
+        
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-50 mb-3">
           Spending Insights
           <button

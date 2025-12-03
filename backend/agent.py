@@ -13,7 +13,7 @@ from langgraph.graph.message import add_messages
 from database import AsyncSessionLocal
 from models import ExpenseModel
 from schemas import ExpenseCategory
-from datetime import date
+from datetime import date, datetime
 from sqlalchemy import select
 from dotenv import load_dotenv
 

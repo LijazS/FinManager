@@ -41,38 +41,48 @@ const TopLeft = () => {
 
     return (
 
-        <div className="h-1/4 w-full flex flex-col bg-[#121212] border border-[#ffffff2d] shadow-md rounded-xl px-4 py-3">
-        <div className="grid grid-cols-3 gap-4 h-full divide-x divide-[#ffffff2d]">
+<div className="relative h-1/4 w-full flex flex-col bg-[#121212] border border-[#ffffff2d] shadow-md rounded-xl px-4 py-3">
+  
+  {/* Refresh Button - Top Right & Small */}
+  <button
+    type="button"
+    onClick={fetchCalc}
+    className="absolute top-2 right-2 inline-flex justify-center items-center rounded-full text-gray-200 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#161515] h-6 w-6 text-sm"
+    aria-label="Refresh"
+  >
+    ⟳
+  </button>
 
-            <div className="grid grid-cols-1 h-full">
-            <div className="flex justify-center items-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
-                TODAY 
-            </div>
-            <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
-                ₹{todays}
-            </div>
-            </div>
+  <div className="grid grid-cols-3 gap-4 h-full divide-x divide-[#ffffff2d]">
+    <div className="grid grid-cols-1 h-full">
+      <div className="flex justify-center items-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
+        TODAY
+      </div>
+      <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
+        ₹{todays}
+      </div>
+    </div>
 
-            <div className="grid grid-cols-1 h-full">
-            <div className="flex justify-center h-full items-center text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
-                THIS MONTH 
-            </div>
-            <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
-                ₹{months}
-            </div>
-            </div>
+    <div className="grid grid-cols-1 h-full">
+      <div className="flex justify-center h-full items-center text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
+        THIS MONTH
+      </div>
+      <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
+        ₹{months}
+      </div>
+    </div>
 
-            <div className="grid grid-cols-1 h-full">
-            <div className="flex justify-center h-full items-center text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
-                THIS YEAR 
-            </div>
-            <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
-                ₹{years}
-            </div>
-            </div>
-            
-        </div>
-        </div>
+    <div className="grid grid-cols-1 h-full">
+      <div className="flex justify-center h-full items-center text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-white">
+        THIS YEAR
+      </div>
+      <div className="flex justify-center h-full text-center text-1xl sm:text-1xl md:text-1xl lg:text-3xl xl:text-4xl font-anton font-extrabold text-[#2bee55]">
+        ₹{years}
+      </div>
+    </div>
+  </div>
+</div>
+
     );
 }
 
